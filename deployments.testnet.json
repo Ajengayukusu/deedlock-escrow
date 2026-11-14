@@ -1,4 +1,5 @@
 {
+  "status": "LIVE",
   "address": "0xb6d7B326F44729772dbAD5B094B61E40C1a71b07",
   "chainId": 9800,
   "contract": "DeedLockEscrow",
@@ -8,11 +9,11 @@
     "asset": "native QOR (token = address(0), funded via msg.value)",
     "escrowId": 0,
     "finalState": {
-      "approvalNonce": 1,
-      "currentTranche": 1,
-      "releasedAmountWei": "100000000000000000",
-      "remainingAmountWei": "100000000000000000",
-      "status": "Funded (1 = tranche 2 of 2 still locked)"
+      "approvalNonce": 2,
+      "currentTranche": 2,
+      "releasedAmountWei": "200000000000000000",
+      "remainingAmountWei": "0",
+      "status": "Released (2 = all 2 tranches released in full)"
     },
     "preflight": {
       "buyerPqcVerifyEthCall": true,
@@ -27,16 +28,27 @@
     "tranchesWei": [
       "100000000000000000",
       "100000000000000000"
-    ]
+    ],
+    "trancheIndex1Completion": {
+      "actionMessageHash": "0xec7f476a6e2d5ce1d60cb359f06dd9b4ab2e60ea8854d7599d899c35197794ac",
+      "buyerApproveTx": "0xcb0e018abfa9be3d51ed525870be4a0b84f3fe7408d1c7ea0ca1585100fc9f8a",
+      "completedAt": "2026-11-15",
+      "preflight": "Both real ML-DSA-87 signatures (4627 bytes) verified against the live 0x0A01 precompile via eth_call BEFORE broadcasting; signatures over actionMessage(escrow 0, APPROVE_RELEASE, trancheIndex 1, approvalNonce 1, deadline).",
+      "sellerApproveTxExecutesRelease": "0xfd01aa4f44b5feacff07e34812b0ec3d6d735d2a7e1e8b2e56ff1322e59eb3ad",
+      "sellerDeltaNote": "+0.1 QOR tranche released − 0.0357013125 QOR seller approveRelease gas = +0.0642986875 QOR net.",
+      "sellerEvmBalanceDeltaWei": "64298687500000000"
+    }
   },
   "evmRpc": "https://evm-testnet.qore.host",
   "evmTxs": {
     "buyerApproveReleaseTranche0": "0x945441f20f61370dade0b6090eeb5c1354ff7b2da380357413c4cf5f216f7ddd",
+    "buyerApproveReleaseTranche1": "0xcb0e018abfa9be3d51ed525870be4a0b84f3fe7408d1c7ea0ca1585100fc9f8a",
     "createEscrow": "0x128900a8ed99aa50ec476bbec416193e30bb4df3755f6699b77a68844fc513e9",
     "deploy": "0xe6baa83ee3ff023e66c011f88acbfaec248c9b889101a101a8b5d00316673b81",
     "fund": "0x60b12f2b2c77bc047d079f45fae30bd034065b4c9772a2bfe699cdced29f236c",
     "negativeGarbageSignatureApproveReverted": "0x9e496f6521e657efc61c7ce9c49a39703e306cad9bb50fc26d5b7db27dfa6da6",
-    "sellerApproveReleaseTranche0ExecutesRelease": "0x1525330808b5c1e07fa773e57d5b1bf621b4abed9db23f3157c780c3d945f888"
+    "sellerApproveReleaseTranche0ExecutesRelease": "0x1525330808b5c1e07fa773e57d5b1bf621b4abed9db23f3157c780c3d945f888",
+    "sellerApproveReleaseTranche1ExecutesRelease": "0xfd01aa4f44b5feacff07e34812b0ec3d6d735d2a7e1e8b2e56ff1322e59eb3ad"
   },
   "explorer": "https://explore.qore.network (Testnet)",
   "localTests": "npx hardhat test \u2192 44 passing (re-run 2026-11-15 after deployment)",
@@ -97,18 +109,19 @@
   "remaining": [
     "QCAI dashboard audit Stage 1 + Stage 2 (requires the user's dashboard sign-in \u2014 separate step, see audit/QCAI_AUDIT_PLAN.md)",
     "Explorer source\u2194bytecode verification (Stage 2.2)",
-    "Optional: complete tranche 2 / dispute / freeze live paths (contract already covered by the 44 local tests; seller window has 2 txs left)"
+    "Optional: dispute / freeze live paths (contract already covered by the 44 local tests; tranche 2 release completed live on 2026-11-15 — escrow #0 fully released; seller EVM window exhausted at 3 of 3 txs, reopen via hybrid before any further seller EVM tx)"
   ],
   "rest": "https://api-testnet.qore.host",
   "windowsAfterAll": {
     "buyer": {
-      "remainingTxs": 8,
-      "remainingValueUqor": "14126872",
-      "note": "Final snapshot after every tx in this file (deploy, create, fund, buyer approve, negative test)."
+      "remainingTxs": 10,
+      "remainingValueUqor": "14197605",
+      "note": "Final snapshot after every tx in this file, including the tranche index 1 approvals that completed escrow #0."
     },
     "seller": {
-      "remainingTxs": 2,
-      "remainingValueUqor": "354215"
+      "remainingTxs": 0,
+      "remainingValueUqor": "217675",
+      "note": "Window closed (live: false) — the seller's tranche index 1 approval used the last of its 3 txs. Reopen via a hybrid native tx before any further seller EVM transaction."
     }
   }
 }

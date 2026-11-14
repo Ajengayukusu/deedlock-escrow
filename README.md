@@ -1,5 +1,7 @@
 # DeedLock Escrow — Post-Quantum Down-Payment Escrow
 
+[![Built on QoreChain](https://build.qorechain.io/badge/deedlock-escrow.svg)](https://build.qorechain.io/p/deedlock-escrow)
+
 > **DP jual-beli properti & kendaraan bekas, dikunci oleh dua tanda tangan ML-DSA-87.**
 > Built for the **QoreChain Developer Fest "Build Before Q-Day"** — **Post-Quantum dApp** category.
 > Testnet: **QoreChain Diana** (EVM chain ID 9800) · Contract: Solidity 0.8.24 · License: MIT
@@ -35,7 +37,9 @@
    `0xe6baa83ee3ff023e66c011f88acbfaec248c9b889101a101a8b5d00316673b81`) against
    the **real** PQC precompiles, and a full escrow was executed on chain:
    created → funded (0.2 QOR) → **buyer ML-DSA-87 approval → seller ML-DSA-87
-   approval → tranche 1 (0.1 QOR) released to the seller**, plus a live
+   approval → tranche 1 (0.1 QOR) released to the seller → both parties
+   approved again → tranche 2 (0.1 QOR) released — escrow #0 fully
+   `Released`, all 0.2 QOR paid out**, plus a live
    garbage-signature approval that reverted with `PqcBadSignature`. Every tx
    hash is in the evidence table below and in `deployments.testnet.json`.
    Still outstanding (tracked honestly, not claimed): the two QCAI dashboard
@@ -125,11 +129,14 @@ keccak-matches the signing key ✓).
 | Fund escrow #0 | EVM | `0x60b12f2b2c77bc047d079f45fae30bd034065b4c9772a2bfe699cdced29f236c` | success |
 | **Buyer approves tranche 1 (ML-DSA-87)** | EVM | `0x945441f20f61370dade0b6090eeb5c1354ff7b2da380357413c4cf5f216f7ddd` | success · signature pre-flight `pqcVerify = true` |
 | **Seller approves tranche 1 (ML-DSA-87) → release executes** | EVM | `0x1525330808b5c1e07fa773e57d5b1bf621b4abed9db23f3157c780c3d945f888` | success · `TrancheApproved` + `TrancheReleased` events · seller +0.1 QOR (net +0.0583 QOR after his gas) |
+| **Buyer approves tranche 2 (ML-DSA-87)** | EVM | `0xcb0e018abfa9be3d51ed525870be4a0b84f3fe7408d1c7ea0ca1585100fc9f8a` | success · signature pre-flight `pqcVerify = true` |
+| **Seller approves tranche 2 (ML-DSA-87) → release executes** | EVM | `0xfd01aa4f44b5feacff07e34812b0ec3d6d735d2a7e1e8b2e56ff1322e59eb3ad` | success · `TrancheApproved` + `TrancheReleased` events · seller +0.1 QOR (net +0.0643 QOR after his gas) · escrow #0 status → `Released` |
 | Negative: garbage signature approval | EVM | `0x9e496f6521e657efc61c7ce9c49a39703e306cad9bb50fc26d5b7db27dfa6da6` | **reverted** · decoded error `PqcBadSignature` (eth_call simulation + on-chain receipt) |
 
-Final on-chain state of escrow #0: `releasedAmount = 0.1 QOR`,
-`remainingAmount = 0.1 QOR`, `currentTranche = 1`, `approvalNonce = 1`
-(both tranche-1 signatures consumed), status `Funded` (tranche 2 still locked).
+Final on-chain state of escrow #0: `releasedAmount = 0.2 QOR` (the full
+funded amount), `remainingAmount = 0`, `currentTranche = 2`,
+`approvalNonce = 2` (all four approvals consumed — both parties, both
+tranches), status `Released`: every tranche released in full to the seller.
 
 ## Run it
 
@@ -204,9 +211,10 @@ the script header repeats these prerequisites.
   What is NOT yet done, and is not claimed anywhere: the two QCAI dashboard
   audit reports (they require a signed-in dashboard session) and the explorer
   source↔bytecode verification that pairs with Stage 2. The live demo covers
-  create → fund → dual-PQC-approval release of tranche 1 and a reverted
-  garbage-signature approval; tranche 2, dispute, freeze and refund paths are
-  covered by the local suite (44 tests) but were not re-run live.
+  create → fund → dual-PQC-approval release of both tranches (escrow #0
+  fully `Released`, all 0.2 QOR paid out) and a reverted
+  garbage-signature approval; the dispute, freeze and refund paths are
+  covered by the local suite (44 tests) but were not run live.
 
 ## Repository layout
 

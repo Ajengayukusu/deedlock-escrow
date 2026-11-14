@@ -61,8 +61,10 @@ what the human decided, and how every AI-generated artefact was verified.*
 - `npx tsc --noEmit` — clean (deploy script + tests typecheck).
 - `cd frontend && npm run build` — clean (tsc + vite production build).
 - Every chain fact in the README traces to a live call or an official doc
-  URL listed in the project strategy file; deployment facts are marked
-  *pending* rather than invented.
+  URL listed in the project strategy file; deployment facts were written
+  down only after the live deployment was verified on chain (the contract
+  address and transaction hashes are recorded in
+  `deployments.testnet.json`).
 
 ## Division of labour, in one line
 
