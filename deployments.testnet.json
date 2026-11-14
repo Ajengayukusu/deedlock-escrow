@@ -1,0 +1,114 @@
+{
+  "address": "0xb6d7B326F44729772dbAD5B094B61E40C1a71b07",
+  "chainId": 9800,
+  "contract": "DeedLockEscrow",
+  "deployedAt": "2026-11-15",
+  "escrowDemo": {
+    "actionMessageHash": "0x220bd82255aba8cc23119c47252937ad44a54dc576b4539cc8594826e2ab4132",
+    "asset": "native QOR (token = address(0), funded via msg.value)",
+    "escrowId": 0,
+    "finalState": {
+      "approvalNonce": 1,
+      "currentTranche": 1,
+      "releasedAmountWei": "100000000000000000",
+      "remainingAmountWei": "100000000000000000",
+      "status": "Funded (1 = tranche 2 of 2 still locked)"
+    },
+    "preflight": {
+      "buyerPqcVerifyEthCall": true,
+      "note": "Both real ML-DSA-87 signatures (4627 bytes) verified against the live 0x0A01 precompile via eth_call BEFORE broadcasting; first encoding variant (sign the 32-byte actionMessage hash) succeeded \u2014 no fallback variants needed.",
+      "sellerPqcVerifyEthCall": true
+    },
+    "refundDurationSeconds": 86400,
+    "releaseEvents": "Seller approve tx carries both TrancheApproved and TrancheReleased logs.",
+    "sellerDeltaNote": "+0.1 QOR tranche released \u2212 0.0416986875 QOR seller approveRelease gas = +0.0583013125 QOR net.",
+    "sellerEvmBalanceDeltaWei": "58301312500000000",
+    "totalAmountWei": "200000000000000000",
+    "tranchesWei": [
+      "100000000000000000",
+      "100000000000000000"
+    ]
+  },
+  "evmRpc": "https://evm-testnet.qore.host",
+  "evmTxs": {
+    "buyerApproveReleaseTranche0": "0x945441f20f61370dade0b6090eeb5c1354ff7b2da380357413c4cf5f216f7ddd",
+    "createEscrow": "0x128900a8ed99aa50ec476bbec416193e30bb4df3755f6699b77a68844fc513e9",
+    "deploy": "0xe6baa83ee3ff023e66c011f88acbfaec248c9b889101a101a8b5d00316673b81",
+    "fund": "0x60b12f2b2c77bc047d079f45fae30bd034065b4c9772a2bfe699cdced29f236c",
+    "negativeGarbageSignatureApproveReverted": "0x9e496f6521e657efc61c7ce9c49a39703e306cad9bb50fc26d5b7db27dfa6da6",
+    "sellerApproveReleaseTranche0ExecutesRelease": "0x1525330808b5c1e07fa773e57d5b1bf621b4abed9db23f3157c780c3d945f888"
+  },
+  "explorer": "https://explore.qore.network (Testnet)",
+  "localTests": "npx hardhat test \u2192 44 passing (re-run 2026-11-15 after deployment)",
+  "nativeLaneTxs": {
+    "buyerHybridSendProof": "9B1AA39F2D087A1BCB31496A9DD57AF6039A784236DCF861F790AB3C2F785BAD",
+    "buyerOpenEvmWindow": "1705A8A44C64C4A71E40E6DF5F44219B2142F6059713175BA704BDF1AA3F5FD6",
+    "buyerPqcRegister": "84EBDFC9544E82FA961A45265F3976C274152A7F012BD8897BFD9721FF687CCC",
+    "fundSellerHybridSend1Qor": "67CD988BD07FB120925CB7CDAE14FCEE6572D596D5074A9F126E5B3F2F70AB33",
+    "sellerOpenEvmWindow": "D10F6B0306AF106BB01B5DE2C5197D0371AE62E86C2D483D1BDBD9990A4BA886",
+    "sellerPqcRegisterFirstTx": "183639CEFC0A2DF61268A9E7198C59FAE698C4BD5EE76F7181E44756AE688291"
+  },
+  "negativeLiveTest": {
+    "broadcastTx": "0x9e496f6521e657efc61c7ce9c49a39703e306cad9bb50fc26d5b7db27dfa6da6",
+    "description": "approveRelease (tranche 1) with the buyer's real pubkey but a garbage 4627-byte signature (0xAB-filled).",
+    "gasUsed": 300000,
+    "receiptStatus": "reverted",
+    "simulateEthCall": "reverted, decoded custom error: PqcBadSignature"
+  },
+  "network": "qorechain-diana",
+  "parties": {
+    "arbiter": {
+      "cosmos": "qor197ja9nv35em87saqfega0re36cadfdrjemgcn2",
+      "evm": "0x2fA5d2CD91A6767f43A04e51d78F31D63AD4b472",
+      "role": "spike unified index 2 (address only in this demo)"
+    },
+    "buyer": {
+      "cosmos": "qor1dcse33ce3n3mwxxleuupqvfqeq6xl552zm2ltk",
+      "evm": "0x6E2198c7198Ce3B718DFCf38103120C8346fD28A",
+      "pqcKeyStatusViaPrecompile": {
+        "algorithmId": 1,
+        "onchainPubkeyBytes": 2592,
+        "possessionProven": true,
+        "pubkeyMatchesDerivedKey": true,
+        "registered": true
+      },
+      "role": "spike unified index 0 (deployer + buyer)"
+    },
+    "guardian": {
+      "cosmos": "qor1y5rrnzllmsd3xvfgkvz50l9508k9pa0h932fzw",
+      "evm": "0x2506398BFFdC1B133128b30547fCb479EC50f5f7",
+      "role": "spike unified index 3 (address only in this demo)"
+    },
+    "seller": {
+      "cosmos": "qor1359rgl28y45dldscnjzxqvcz6pz0qyrmjq488c",
+      "evm": "0x8d0A347d472568DfB6189c84603302d044F0107b",
+      "pqcKeyStatusViaPrecompile": {
+        "algorithmId": 1,
+        "onchainPubkeyBytes": 2592,
+        "possessionProven": true,
+        "pubkeyMatchesDerivedKey": true,
+        "registered": true
+      },
+      "role": "spike unified index 1"
+    }
+  },
+  "pqcKeyStatusPrecompile": "0x0000000000000000000000000000000000000A02",
+  "pqcVerifyPrecompile": "0x0000000000000000000000000000000000000A01",
+  "remaining": [
+    "QCAI dashboard audit Stage 1 + Stage 2 (requires the user's dashboard sign-in \u2014 separate step, see audit/QCAI_AUDIT_PLAN.md)",
+    "Explorer source\u2194bytecode verification (Stage 2.2)",
+    "Optional: complete tranche 2 / dispute / freeze live paths (contract already covered by the 44 local tests; seller window has 2 txs left)"
+  ],
+  "rest": "https://api-testnet.qore.host",
+  "windowsAfterAll": {
+    "buyer": {
+      "remainingTxs": 8,
+      "remainingValueUqor": "14126872",
+      "note": "Final snapshot after every tx in this file (deploy, create, fund, buyer approve, negative test)."
+    },
+    "seller": {
+      "remainingTxs": 2,
+      "remainingValueUqor": "354215"
+    }
+  }
+}
