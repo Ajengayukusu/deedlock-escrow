@@ -2,6 +2,8 @@
 
 [![Built on QoreChain](https://build.qorechain.io/badge/deedlock-escrow.svg)](https://build.qorechain.io/p/deedlock-escrow)
 
+**Live demo:** https://ajengayukusu.github.io/deedlock-escrow/
+
 > **DP jual-beli properti & kendaraan bekas, dikunci oleh dua tanda tangan ML-DSA-87.**
 > Built for the **QoreChain Developer Fest "Build Before Q-Day"** — **Post-Quantum dApp** category.
 > Testnet: **QoreChain Diana** (EVM chain ID 9800) · Contract: Solidity 0.8.24 · License: MIT
@@ -26,9 +28,10 @@
    ```bash
    npm install && npx hardhat test
    ```
-4. **See it (60 s).** Run the demo frontend (local simulation of the exact contract
-   state machine — create → fund → two-party PQ approvals → milestone timeline →
-   dispute / freeze / refund):
+4. **See it (60 s).** Open the hosted demo at https://ajengayukusu.github.io/deedlock-escrow/
+   (a simulation of the exact contract state machine — create → fund → two-party
+   PQ approvals → milestone timeline → dispute / freeze / refund), or run it
+   locally:
    ```bash
    cd frontend && npm install && npm run dev   # http://localhost:5173
    ```
