@@ -4,6 +4,8 @@
 
 **Live demo:** https://ajengayukusu.github.io/deedlock-escrow/
 
+**Demo video (≤ 3 min):** https://www.youtube.com/watch?v=5KSFolo4E1I
+
 > **DP jual-beli properti & kendaraan bekas, dikunci oleh dua tanda tangan ML-DSA-87.**
 > Built for the **QoreChain Developer Fest "Build Before Q-Day"** — **Post-Quantum dApp** category.
 > Testnet: **QoreChain Diana** (EVM chain ID 9800) · Contract: Solidity 0.8.24 · License: MIT
