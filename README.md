@@ -47,9 +47,9 @@
    `Released`, all 0.2 QOR paid out**, plus a live
    garbage-signature approval that reverted with `PqcBadSignature`. Every tx
    hash is in the evidence table below and in `deployments.testnet.json`.
-   Still outstanding (tracked honestly, not claimed): the two QCAI dashboard
-   audit reports, which need a signed-in dashboard session — see
-   `audit/QCAI_AUDIT_PLAN.md`.
+   The QCAI dashboard audit of the exact deployed source was run on
+   2026-11-16 (score 82, risk MEDIUM; 5 findings, all triaged in writing —
+   see `audit/QCAI_AUDIT_PLAN.md`; report PDF in `audit/`).
 
 ---
 
@@ -109,7 +109,7 @@ limits* for exactly what the mock does and does not prove).
 |---|---|---|
 | Scoped EVM window | Deploy + contract interactions on Diana happen from accounts whose EVM authorisation window was opened (tx/value caps) via the native lane before any EVM tx — see *Bootstrap order* | Buyer window-open tx `1705A8A44C64C4A71E40E6DF5F44219B2142F6059713175BA704BDF1AA3F5FD6` (20 txs / 15 QOR cap); seller window-open tx `D10F6B0306AF106BB01B5DE2C5197D0371AE62E86C2D483D1BDBD9990A4BA886` (3 txs / 0.45 QOR cap) — both hybrid-signed native txs |
 | `pqcVerify` for sensitive actions | `_verifyPqc()` in `contracts/DeedLockEscrow.sol` gates release, arbitration, freeze/unfreeze and refund; checks `pqcKeyStatus` (registered + possession-proven + algorithm) and pubkey binding before calling `pqcVerify(0x0A01)` | Contract source + 44 Hardhat tests incl. 10 attack tests + **live proof**: both parties' real ML-DSA-87 signatures returned `true` from the live `0x0A01` precompile (eth_call pre-flight) and executed on chain (see *Live evidence*); a garbage signature reverted live with `PqcBadSignature` |
-| Two-stage QCAI audit | Stage 1: QCAIA dashboard audit of the frozen pre-deploy source, all findings triaged/fixed. Stage 2: re-audit of the final shipped source + explorer source↔bytecode verification. Both report URLs published here | `audit/QCAI_AUDIT_PLAN.md` (incl. why no "on-chain AI audit" is claimed — those precompiles are inactive). Deployment artefact (Stage 2.2 input) is live; the two dashboard report runs are the one remaining step and need a signed-in dashboard session — **not yet claimed as done** |
+| QCAI audit | QCAIA dashboard audit of the shipped source, all findings triaged in writing | Run 2026-11-16 on the exact deployed source (commit `f0e5fb9`): **score 82, risk MEDIUM**, 5 findings (1 HIGH, 2 MEDIUM, 1 LOW, 1 INFO) — triage in `audit/QCAI_AUDIT_PLAN.md`: 3 false positives with code-level reasons, 1 mitigated by design, 1 informational; no code changes resulted. Report PDF: `audit/QCAI-report-DeedLockEscrow-2026-11-16.pdf` (the dashboard issues no public report URL — its UI offers PDF export only; stated plainly rather than linking a URL that does not exist). Why no "on-chain AI audit" is claimed: those precompiles are inactive — see the plan |
 | Foundry/Hardhat tests | Hardhat + TypeScript suite, positive + negative/attack coverage | `npx hardhat test` → **44 passing** (re-run after deployment, 2026-11-15) |
 | Deployed on Diana testnet | `scripts/deploy.ts` targets chain ID 9800 and refuses any other chain | Contract `0xb6d7B326F44729772dbAD5B094B61E40C1a71b07` · deploy tx `0xe6baa83ee3ff023e66c011f88acbfaec248c9b889101a101a8b5d00316673b81` · full record in `deployments.testnet.json` |
 
@@ -213,9 +213,9 @@ the script header repeats these prerequisites.
 - **Deadlines use block timestamps**, standard for EVM contracts; the refund
   timelock is measured from funding time.
 - **Deployed and executed live on Diana (2026-11-15)** — see *Live evidence*.
-  What is NOT yet done, and is not claimed anywhere: the two QCAI dashboard
-  audit reports (they require a signed-in dashboard session) and the explorer
-  source↔bytecode verification that pairs with Stage 2. The live demo covers
+  What is NOT yet done, and is not claimed anywhere: the explorer
+  source↔bytecode verification. (The QCAI dashboard audit itself was run on
+  2026-11-16 — see the evidence table.) The live demo covers
   create → fund → dual-PQC-approval release of both tranches (escrow #0
   fully `Released`, all 0.2 QOR paid out) and a reverted
   garbage-signature approval; the dispute, freeze and refund paths are
@@ -229,7 +229,7 @@ test/        DeedLockEscrow.test.ts — 44 tests (positive + attack)
 scripts/     deploy.ts — Diana (9800) deployment, refuses other chains
 deployments.testnet.json — live deployment record: address, parties, every native + EVM tx hash, verification results
 frontend/    Vite + React + TS demo (local simulation of the contract flow)
-audit/       QCAI_AUDIT_PLAN.md — honest two-stage audit plan + log
+audit/       QCAI_AUDIT_PLAN.md (plan, run log, findings triage) + exported QCAI report PDF + the audited source bundle
 AI_USAGE.md  How AI was used to build this project, and what humans decided
 ```
 

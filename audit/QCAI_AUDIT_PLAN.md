@@ -12,6 +12,13 @@ exists today:
    day (extra runs cost test-QOR on testnet). Its own documentation states it
    is **not a formal audit**: it does not compile, run or runtime-test the
    contract. Public reports live at `dashboard.qorechain.io/audits/<id>`.
+   **Correction from the live run (2026-11-16):** the current dashboard UI
+   does **not** issue a public report URL — the report renders inline on the
+   audit page and the only export offered is a PDF ("Export PDF"). The UI
+   displays "Audit Cost: 150 QOR" with a Confirm dialog; on Testnet mode no
+   wallet, balance or payment was engaged for the run below, and the UI never
+   states whether the run consumed the free daily allowance. The deliverable
+   of a run is therefore the exported PDF, kept in this `audit/` folder.
 2. **The on-chain AI precompiles** (`aiRiskScore` 0x0B01 / `aiAnomalyCheck`
    0x0B02) are **NOT active** on Diana testnet or on mainnet (verified live:
    they are absent from `active_static_precompiles`). Any submission claiming
@@ -46,9 +53,29 @@ produce artefacts a judge can open and check.
 
 | Date | Stage | Source commit | Report URL | Findings | Status |
 |---|---|---|---|---|---|
-| _(pending — dashboard run needs the user's signed-in dashboard session; scheduled as its own step)_ | 1 | — | — | — | ⏸ |
-| _(pending — same session as Stage 1)_ | 2 | — | — | — | ⏸ |
+| 2026-11-16 | 2 (final deployed source; Stage 1 collapsed — see note below) | `f0e5fb98735adbf06ad19dca9639388ccd9f6f9e` | No public URL exists in the current UI — report rendered inline on the audit page; PDF exported to this folder (`QCAI-report-DeedLockEscrow-2026-11-16.pdf`) | Score **82**, risk **MEDIUM**, quantum-safe "Not scored" by the tool; 5 findings (1 HIGH, 2 MEDIUM, 1 LOW, 1 INFO) — all triaged below: 3 false positives, 1 mitigated by design, 1 informational. No code changes resulted. | ✅ run complete |
 | 2026-11-15 | Deployment (Stage 2.2 input) | shipped source (this repo) | n/a — chain evidence in `deployments.testnet.json` | Deployed to Diana: `0xb6d7B326F44729772dbAD5B094B61E40C1a71b07`; live dual-ML-DSA release of tranche 1 executed; garbage-signature approval reverted `PqcBadSignature`; local suite re-run green (44 passing) | ✅ deployment done — QCAI report runs (1.3 / 2.1) still outstanding, deliberately not run without the user's dashboard sign-in |
+
+## Findings triage — run of 2026-11-16 (step 1.4)
+
+Every finding from the report, triaged in writing against the deployed
+source. No silent dismissals.
+
+| # | Severity (tool) | Finding | Verdict | Reason, verifiable in the source |
+|---|---|---|---|---|
+| 1 | HIGH | "Missing Access Control on Critical Functions" — `freeze`/`unfreeze` (DeedLockEscrow.sol:372-390 in the pasted file) | **False positive** | Both functions require `msg.sender == e.guardian` (the guardian designated for that specific escrow at creation) **and** a valid ML-DSA-87 signature verified by `_verifyPqc` against the guardian's on-chain registered key (registration + proof-of-possession + algorithm + pubkey-hash match + anti-replay nonce + deadline). That is strictly stronger than a role check; the tool appears not to have traced `_verifyPqc`. State checks also exist: `freeze` requires Funded/Disputed and not already frozen; `unfreeze` requires frozen. |
+| 2 | MEDIUM | "Potential Overflow in Tranche Calculation" — `arbitrate` multiplication (320-325) | **False positive** | `arbitrate` reverts `InvalidBps` when `sellerBps > 10_000` **before** the multiplication; `remainingAmount` is bounded by the funded total; and Solidity 0.8.24 checked arithmetic reverts on overflow regardless. |
+| 3 | MEDIUM | "Potential Reentrancy Risk in `_pay`" (411-419) | **Mitigated by design — accepted, no change** | Every fund-moving entry point (`fund`, `approveRelease`, `claimRefund`, `arbitrate`) is `nonReentrant`, and all state (remaining/released amounts, status, nonce) is updated **before** `_pay` is called (checks-effects-interactions). The tool's suggestion to prefer `transfer` over `call` is outdated practice: the 2300-gas stipend breaks smart-contract wallets; `call` + `nonReentrant` + CEI is the current standard. |
+| 4 | LOW | "Unbounded Loop in Tranche Validation" — `createEscrow` loop (185-192) | **False positive** | The loop is bounded by construction: `tranches.length > MAX_TRANCHES` (5) reverts before the loop, so it iterates at most 5 times. |
+| 5 | INFO | "ERC20 Token Handling" (134-142) | **Informational — no action** | Positive note: the contract correctly handles native QOR and ERC20 (SafeERC20) paths. |
+
+**Stage-collapse note (honesty):** Stage 1 of this plan assumed a pre-deploy
+draft that would differ from the shipped code. In fact the deployed contract
+is the repository's initial commit and the source never changed afterwards,
+so there is no distinct "draft source" to audit retroactively. The single
+run above therefore audits the exact deployed source — the artefact that
+matters — and the README describes it as one audit with full triage rather
+than claiming two stages that did not happen.
 
 ## Known limits of this plan
 
