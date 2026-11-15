@@ -45,7 +45,7 @@ produce artefacts a judge can open and check.
 | Step | Action | Artefact |
 |---|---|---|
 | 2.1 | Re-run QCAIA on the FINAL source (this is the "second stage": the auditor must see the code that actually ships, not the draft). | second public report URL `/audits/<id>` |
-| 2.2 | Confirm the Stage-2 report corresponds to the deployed bytecode: deploy from the same commit, then verify source ↔ bytecode on the explorer. | explorer verification link — ⏳ deployment DONE 2026-11-15 (contract `0xb6d7B326F44729772dbAD5B094B61E40C1a71b07`, deploy tx `0xe6baa83ee3ff023e66c011f88acbfaec248c9b889101a101a8b5d00316673b81`); explorer verification still pending the dashboard/explorer session |
+| 2.2 | Confirm the Stage-2 report corresponds to the deployed bytecode: deploy from the same commit, then verify source ↔ bytecode on the explorer. | Deployment DONE 2026-11-15 (contract `0xb6d7B326F44729772dbAD5B094B61E40C1a71b07`, deploy tx `0xe6baa83ee3ff023e66c011f88acbfaec248c9b889101a101a8b5d00316673b81`). Explorer verification: **not applicable** — checked live 2026-11-16, explore.qore.network has no source-verification feature (the address renders as a generic account page; no code tab, no verify form). Correspondence rests on the public repo source (commit `f0e5fb9`), the deploy tx, and the live on-chain behaviour proofs. |
 | 2.3 | Publish both report URLs in the README's evidence table, side by side, with the delta (what was found, what changed). | README section "Two-stage QCAI audit" |
 | 2.4 | If a later contract version ships (v2+), repeat Stage 1 + Stage 2 for that version. An audit of v1 says nothing about v2. | new rows in the audit log |
 

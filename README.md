@@ -213,9 +213,13 @@ the script header repeats these prerequisites.
 - **Deadlines use block timestamps**, standard for EVM contracts; the refund
   timelock is measured from funding time.
 - **Deployed and executed live on Diana (2026-11-15)** — see *Live evidence*.
-  What is NOT yet done, and is not claimed anywhere: the explorer
-  source↔bytecode verification. (The QCAI dashboard audit itself was run on
-  2026-11-16 — see the evidence table.) The live demo covers
+  On explorer verification: the QoreChain explorer (explore.qore.network)
+  offers **no contract source-verification feature at all** — checked live on
+  2026-11-16, the contract address renders as a generic account page with no
+  code tab and no verify form — so there is no explorer verification to
+  claim or to miss. Source↔deployment correspondence rests on the public
+  source in this repo (commit `f0e5fb9`), the recorded deploy transaction,
+  and the QCAI audit of that exact source (see the evidence table). The live demo covers
   create → fund → dual-PQC-approval release of both tranches (escrow #0
   fully `Released`, all 0.2 QOR paid out) and a reverted
   garbage-signature approval; the dispute, freeze and refund paths are
