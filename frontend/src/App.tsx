@@ -59,7 +59,7 @@ function fakeSig(e: Escrow, action: string, who: string): string {
 
 const seedEscrow: Escrow = {
   id: 0,
-  title: "DP Rumah — Jl. Merdeka No. 12, Bandung",
+  title: "House down payment — Jl. Merdeka No. 12, Bandung",
   buyer: DEMO.buyer,
   seller: DEMO.seller,
   arbiter: DEMO.arbiter,
@@ -85,7 +85,7 @@ export default function App() {
   const [sellerBps, setSellerBps] = useState(7000);
 
   // create-form state
-  const [title, setTitle] = useState("DP Mobil — Toyota Avanza 2019, Jakarta");
+  const [title, setTitle] = useState("Car down payment — Toyota Avanza 2019, Jakarta");
   const [asset, setAsset] = useState<"QOR" | "fUSD">("QOR");
   const [totalStr, setTotalStr] = useState("120");
   const [tranchesStr, setTranchesStr] = useState("60, 40, 20");
@@ -112,15 +112,15 @@ export default function App() {
       .map((s) => Number(s.trim()))
       .filter((n) => !Number.isNaN(n));
     // Mirror the contract's createEscrow validation.
-    if (!total || total <= 0) return setFormError("Total harus > 0.");
+    if (!total || total <= 0) return setFormError("Total must be > 0.");
     if (tranches.length < 1 || tranches.length > 5)
-      return setFormError("Jumlah tranche harus 1–5 (aturan kontrak: MAX_TRANCHES = 5).");
+      return setFormError("Number of tranches must be 1–5 (contract rule: MAX_TRANCHES = 5).");
     if (tranches.some((t) => t <= 0))
-      return setFormError("Setiap tranche harus > 0.");
+      return setFormError("Every tranche must be > 0.");
     const sum = tranches.reduce((a, b) => a + b, 0);
     if (sum !== total)
-      return setFormError(`Jumlah tranche (${sum}) harus persis sama dengan total (${total}).`);
-    if (!(Number(refundDays) > 0)) return setFormError("Durasi refund harus > 0 hari.");
+      return setFormError(`Tranche amounts (${sum}) must add up exactly to the total (${total}).`);
+    if (!(Number(refundDays) > 0)) return setFormError("Refund period must be > 0 days.");
     setFormError(null);
     const id = escrows.length;
     const e: Escrow = {
@@ -219,48 +219,48 @@ export default function App() {
         <div className="badges">
           <span className="badge">QoreChain Diana Testnet · EVM 9800</span>
           <span className="badge">ML-DSA-87 · pqcVerify 0x0A01</span>
-          <span className="badge demo">MODE DEMO — simulasi lokal, tanpa chain</span>
+          <span className="badge demo">DEMO MODE — local simulation, no chain connection</span>
         </div>
       </header>
       <p className="sub">
-        Escrow uang muka (DP) jual-beli properti &amp; kendaraan bekas di Indonesia.
-        Dana terkunci di kontrak dan hanya cair bila <b>pembeli DAN penjual sama-sama
-        menandatangani dengan kunci ML-DSA-87</b> yang terdaftar on-chain — kunci
-        ECDSA saja tidak pernah cukup. Di testnet, tanda tangan itu diverifikasi
-        asli oleh precompile <i>pqcVerify</i>; di demo ini tombol approval adalah
-        simulasinya.
+        Down-payment escrow for property and used-vehicle sales in Indonesia.
+        Funds stay locked in the contract and are released only when <b>the buyer AND the seller both
+        sign with an ML-DSA-87 key</b> registered on-chain — an ECDSA key
+        alone is never enough. On testnet that signature is genuinely verified
+        by the <i>pqcVerify</i> precompile; in this demo the approval buttons
+        simulate it.
       </p>
 
       <div className="grid">
         {/* ---------------- Create form + list ---------------- */}
         <div>
           <form className="card" onSubmit={createEscrow}>
-            <h2>Buat Escrow Baru</h2>
-            <label>Judul transaksi</label>
+            <h2>Create New Escrow</h2>
+            <label>Transaction title</label>
             <input value={title} onChange={(e) => setTitle(e.target.value)} />
-            <label>Aset</label>
+            <label>Asset</label>
             <select value={asset} onChange={(e) => setAsset(e.target.value as "QOR" | "fUSD")}>
               <option value="QOR">QOR (native)</option>
               <option value="fUSD">fUSD (ERC-20 testnet)</option>
             </select>
-            <label>Total DP ({asset})</label>
+            <label>Total down payment ({asset})</label>
             <input value={totalStr} onChange={(e) => setTotalStr(e.target.value)} inputMode="decimal" />
-            <label>Tranche milestone (pisahkan koma, maks 5, jumlah = total)</label>
+            <label>Milestone tranches (comma-separated, max 5, must sum to the total)</label>
             <input value={tranchesStr} onChange={(e) => setTranchesStr(e.target.value)} />
-            <label>Batas waktu refund sepihak pembeli (hari, setelah dana masuk)</label>
+            <label>Buyer's unilateral refund deadline (days after funding)</label>
             <input value={refundDays} onChange={(e) => setRefundDays(e.target.value)} inputMode="numeric" />
             <p className="hint">
-              Pihak demo — Pembeli: kamu · Penjual, Arbitrator &amp; Guardian: alamat demo tetap.
-              Keempat pihak harus berbeda dan bukan alamat nol (sama seperti validasi kontrak).
+              Demo parties — Buyer: you · Seller, Arbitrator &amp; Guardian: fixed demo addresses.
+              All four parties must be different and non-zero (the same validation the contract applies).
             </p>
             {formError && <div className="err">{formError}</div>}
             <button className="primary" type="submit">
-              Buat Escrow
+              Create Escrow
             </button>
           </form>
 
           <div className="card" style={{ marginTop: 20 }}>
-            <h2>Escrow Saya</h2>
+            <h2>My Escrows</h2>
             {escrows.map((e) => (
               <div
                 key={e.id}
@@ -273,8 +273,8 @@ export default function App() {
                   {e.frozen && <span className="pill Disputed">Frozen</span>}
                 </div>
                 <div className="m">
-                  {e.total.toLocaleString("id-ID")} {e.asset} · cair{" "}
-                  {e.released.toLocaleString("id-ID")} · {e.tranches.length} tranche
+                  {e.total.toLocaleString("en-US")} {e.asset} · released{" "}
+                  {e.released.toLocaleString("en-US")} · {e.tranches.length} tranche
                 </div>
               </div>
             ))}
@@ -287,51 +287,51 @@ export default function App() {
             <h2>
               #{selected.id} — {selected.title}
               <span className={`pill ${selected.status}`}>{selected.status}</span>
-              {selected.frozen && <span className="pill Disputed">Frozen oleh Guardian</span>}
+              {selected.frozen && <span className="pill Disputed">Frozen by Guardian</span>}
             </h2>
 
             <dl className="kv">
-              <dt>Pembeli</dt><dd>{selected.buyer}</dd>
-              <dt>Penjual</dt><dd>{selected.seller}</dd>
+              <dt>Buyer</dt><dd>{selected.buyer}</dd>
+              <dt>Seller</dt><dd>{selected.seller}</dd>
               <dt>Arbitrator (PQ)</dt><dd>{selected.arbiter}</dd>
               <dt>Guardian</dt><dd>{selected.guardian}</dd>
-              <dt>Nonce anti-replay</dt><dd>{selected.nonce}</dd>
-              <dt>Sisa terkunci</dt>
-              <dd>{remaining.toLocaleString("id-ID")} {selected.asset}</dd>
+              <dt>Anti-replay nonce</dt><dd>{selected.nonce}</dd>
+              <dt>Remaining locked</dt>
+              <dd>{remaining.toLocaleString("en-US")} {selected.asset}</dd>
             </dl>
 
-            <h3>Timeline Milestone</h3>
+            <h3>Milestone Timeline</h3>
             <div className="timeline">
               {selected.tranches.map((amt, i) => {
                 const cls = i < selected.currentTranche ? "done" : i === selected.currentTranche && selected.status === "Funded" ? "now" : "";
-                const label = i < selected.currentTranche ? "Cair ✓" : i === selected.currentTranche ? "Menunggu 2 approval" : "Terkunci";
+                const label = i < selected.currentTranche ? "Released ✓" : i === selected.currentTranche ? "Awaiting 2 approvals" : "Locked";
                 return (
                   <div key={i} className={`step ${cls}`}>
                     Tranche {i + 1}
-                    <span className="amt">{amt.toLocaleString("id-ID")} {selected.asset}</span>
+                    <span className="amt">{amt.toLocaleString("en-US")} {selected.asset}</span>
                     {label}
                   </div>
                 );
               })}
             </div>
             <div className="progress"><div style={{ width: `${releasedPct}%` }} /></div>
-            <p className="hint">{releasedPct}% dana sudah cair ke penjual.</p>
+            <p className="hint">{releasedPct}% of the funds have been released to the seller.</p>
 
             {selected.status === "Created" && (
               <div className="row">
                 <button className="primary" onClick={() => fund(selected)}>
-                  Danai Escrow ({selected.total.toLocaleString("id-ID")} {selected.asset})
+                  Fund Escrow ({selected.total.toLocaleString("en-US")} {selected.asset})
                 </button>
               </div>
             )}
 
             {selected.status === "Funded" && !selected.frozen && (
               <>
-                <h3>Panel Approval Dua Pihak — Tranche {selected.currentTranche + 1}</h3>
+                <h3>Two-Party Approval Panel — Tranche {selected.currentTranche + 1}</h3>
                 <p className="hint">
-                  Setiap approval = tanda tangan ML-DSA-87 atas pesan terikat domain
-                  (kontrak, id escrow, aksi, tranche, nonce, deadline). Satu approval saja
-                  tidak mencairkan apa pun.
+                  Each approval is an ML-DSA-87 signature over a domain-bound message
+                  (contract, escrow id, action, tranche, nonce, deadline). A single approval
+                  on its own releases nothing.
                 </p>
                 <div className="row">
                   <button
@@ -339,24 +339,24 @@ export default function App() {
                     disabled={selected.approvals.buyer}
                     onClick={() => approve(selected, "buyer")}
                   >
-                    {selected.approvals.buyer ? "Pembeli ✓ Sudah Approve" : "Approve — Pembeli (PQ Sign)"}
+                    {selected.approvals.buyer ? "Buyer ✓ Approved" : "Approve — Buyer (PQ Sign)"}
                   </button>
                   <button
                     className={`pq ${selected.approvals.seller ? "approved" : ""}`}
                     disabled={selected.approvals.seller}
                     onClick={() => approve(selected, "seller")}
                   >
-                    {selected.approvals.seller ? "Penjual ✓ Sudah Approve" : "Approve — Penjual (PQ Sign)"}
+                    {selected.approvals.seller ? "Seller ✓ Approved" : "Approve — Seller (PQ Sign)"}
                   </button>
                 </div>
                 <div className="row">
                   <button className="danger" onClick={() => dispute(selected)}>
-                    Ajukan Sengketa
+                    Open Dispute
                   </button>
                   <button disabled={!refundUnlocked} onClick={() => refund(selected)}>
                     {refundUnlocked
-                      ? "Refund ke Pembeli (PQ Sign)"
-                      : "Refund Terkunci oleh Timelock"}
+                      ? "Refund to Buyer (PQ Sign)"
+                      : "Refund Locked by Timelock"}
                   </button>
                 </div>
               </>
@@ -364,18 +364,18 @@ export default function App() {
 
             {selected.status === "Funded" && (
               <p className="hint">
-                Jam demo: {Math.floor(clock / 3600)} jam sejak pendanaan · timelock refund:{" "}
-                {Math.round(selected.refundDurationSec / 3600)} jam.{" "}
-                <button onClick={() => setClock((c) => c + 24 * 3600)}>+24 jam (simulasi waktu)</button>
+                Demo clock: {Math.floor(clock / 3600)} hours since funding · refund timelock:{" "}
+                {Math.round(selected.refundDurationSec / 3600)} hours.{" "}
+                <button onClick={() => setClock((c) => c + 24 * 3600)}>+24 hours (simulate time)</button>
               </p>
             )}
 
             {selected.status === "Disputed" && (
               <>
-                <h3>Keputusan Arbitrator (wajib PQ Sign)</h3>
+                <h3>Arbitrator's Decision (PQ Sign required)</h3>
                 <div className="split">
-                  <span>Penjual: {sellerBps / 100}%</span>
-                  <span>Pembeli: {(10000 - sellerBps) / 100}%</span>
+                  <span>Seller: {sellerBps / 100}%</span>
+                  <span>Buyer: {(10000 - sellerBps) / 100}%</span>
                 </div>
                 <input
                   type="range"
@@ -387,7 +387,7 @@ export default function App() {
                 />
                 <div className="row">
                   <button className="pq" onClick={() => arbitrate(selected)}>
-                    Putuskan — Arbitrator (PQ Sign)
+                    Decide — Arbitrator (PQ Sign)
                   </button>
                 </div>
               </>
@@ -398,7 +398,7 @@ export default function App() {
                 <button onClick={() => toggleFreeze(selected)}>
                   {selected.frozen
                     ? "Unfreeze — Guardian (PQ Sign)"
-                    : "Freeze — Guardian (PQ Sign, hanya membekukan)"}
+                    : "Freeze — Guardian (PQ Sign, freeze only)"}
                 </button>
               </div>
             )}
@@ -407,14 +407,14 @@ export default function App() {
               selected.status === "Refunded" ||
               selected.status === "Resolved") && (
               <p className="hint">
-                Escrow selesai dengan status <b>{selected.status}</b>. Tidak ada aksi
-                lanjutan yang mungkin — sama seperti kontrak on-chain.
+                This escrow has finished with status <b>{selected.status}</b>. No further actions
+                are possible — exactly as with the on-chain contract.
               </p>
             )}
 
             {selected.lastSig && (
               <p>
-                Signature terakhir (simulasi): <span className="sig">{selected.lastSig}</span>
+                Last signature (simulated): <span className="sig">{selected.lastSig}</span>
               </p>
             )}
           </div>
@@ -423,8 +423,8 @@ export default function App() {
 
       <p className="hint" style={{ marginTop: 24 }}>
         DeedLock Escrow · QoreChain Build Before Q-Day — Post-Quantum dApp ·
-        Kontrak: <i>DeedLockEscrow.sol</i> (Solidity 0.8.24) · Precompile Diana:
-        pqcVerify 0x0A01, pqcKeyStatus 0x0A02 · Demo ini tidak terhubung ke chain.
+        Contract: <i>DeedLockEscrow.sol</i> (Solidity 0.8.24) · Diana precompiles:
+        pqcVerify 0x0A01, pqcKeyStatus 0x0A02 · This demo is not connected to the chain.
       </p>
     </div>
   );
