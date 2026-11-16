@@ -3,7 +3,7 @@
 *Documentation for the Best AI-Native Build special award: what the AI did,
 what the human decided, and how every AI-generated artefact was verified.*
 
-## Human (Ajeng Ayu Kusum) — direction & decisions
+## Human (Ajeng Ayu Kusuma) — direction & decisions
 
 - Chose the problem space: fraud-prone down payments (DP) in Indonesian
   property and used-vehicle sales, and the Post-Quantum dApp category.
