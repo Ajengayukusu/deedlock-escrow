@@ -35,7 +35,7 @@
       "completedAt": "2026-11-15",
       "preflight": "Both real ML-DSA-87 signatures (4627 bytes) verified against the live 0x0A01 precompile via eth_call BEFORE broadcasting; signatures over actionMessage(escrow 0, APPROVE_RELEASE, trancheIndex 1, approvalNonce 1, deadline).",
       "sellerApproveTxExecutesRelease": "0xfd01aa4f44b5feacff07e34812b0ec3d6d735d2a7e1e8b2e56ff1322e59eb3ad",
-      "sellerDeltaNote": "+0.1 QOR tranche released − 0.0357013125 QOR seller approveRelease gas = +0.0642986875 QOR net.",
+      "sellerDeltaNote": "+0.1 QOR tranche released \u2212 0.0357013125 QOR seller approveRelease gas = +0.0642986875 QOR net.",
       "sellerEvmBalanceDeltaWei": "64298687500000000"
     }
   },
@@ -109,7 +109,7 @@
   "remaining": [
     "QCAI dashboard audit Stage 1 + Stage 2 (requires the user's dashboard sign-in \u2014 separate step, see audit/QCAI_AUDIT_PLAN.md)",
     "Explorer source\u2194bytecode verification (Stage 2.2)",
-    "Optional: dispute / freeze live paths (contract already covered by the 44 local tests; tranche 2 release completed live on 2026-11-15 — escrow #0 fully released; seller EVM window exhausted at 3 of 3 txs, reopen via hybrid before any further seller EVM tx)"
+    "Optional: dispute / freeze live paths (contract already covered by the 44 local tests; tranche 2 release completed live on 2026-11-15 \u2014 escrow #0 fully released; seller EVM window exhausted at 3 of 3 txs, reopen via hybrid before any further seller EVM tx)"
   ],
   "rest": "https://api-testnet.qore.host",
   "windowsAfterAll": {
@@ -121,7 +121,33 @@
     "seller": {
       "remainingTxs": 0,
       "remainingValueUqor": "217675",
-      "note": "Window closed (live: false) — the seller's tranche index 1 approval used the last of its 3 txs. Reopen via a hybrid native tx before any further seller EVM transaction."
+      "note": "Window closed (live: false) \u2014 the seller's tranche index 1 approval used the last of its 3 txs. Reopen via a hybrid native tx before any further seller EVM transaction."
     }
-  }
+  },
+  "escrowCountNow": 3,
+  "escrow2Cycle2026-11-19": {
+    "purpose": "Second full escrow cycle on the live contract (upgrade round, 19 Nov 2026): create -> fund -> dual ML-DSA-87 approvals -> both tranches released.",
+    "escrowId": 2,
+    "sellerWindowReopenTxHash": "3CDFB0F24EDA10A6DA7852855D19DA154DDC86DC70A108358CE7D7DA83177F54",
+    "createTx": "0xfc7a5ee3130c77220bf9cd7e29472cc319f5d4b9893a7f051ad1c65188e9d5a1",
+    "fundTx": "0x2a59aeb636b5f286b8ee9eabb8e8b5643189e64ff90769dba0d84e51b615c628",
+    "buyerApproveTranche0Tx": "0x69776b6f830ead191025ec3645e7e77f47f60d52e9c9a672d82b4e367de7d011",
+    "sellerApproveTranche0ReleaseTx": "0xf069c90388f65b32959555a9b94162fbc43cc4af2fba0180f4ea55b321ff2648",
+    "buyerApproveTranche1Tx": "0xa011448f2c1dbee02fab1aaa1e8331d6c2caced382bbedc3e8550357776c5134",
+    "sellerApproveTranche1ReleaseTx": "0x0633c9fdc61ad3ca731974e23d963374b992f873127b6e0fc29fe4056ed84bf4",
+    "preflight": "Every ML-DSA-87 signature pre-flighted against the live 0x0A01 pqcVerify precompile via eth_call before broadcast (all true).",
+    "finalState": {
+      "totalAmountWei": "200000000000000000",
+      "releasedAmountWei": "200000000000000000",
+      "remainingAmountWei": "0",
+      "currentTranche": 2,
+      "approvalNonce": 2,
+      "status": "Released (2)"
+    },
+    "sellerBalanceDeltaTranche0Wei": "58322912500000000",
+    "sellerBalanceDeltaTranche1Wei": "64285187500000000",
+    "verification": "Independent eth_call re-read of getEscrow(2) and escrowCount() after the run."
+  },
+  "escrow1ExternalNote": "escrowCount is 3 because escrow #1 (buyer 0x1175E26b24330faD35969fC53f228C6299e21F25, seller 0x29D65D485c5F165aD44AAD5325ab5CB714ed8698) was created by an unrelated external account, total 0.2 QOR, status Created, never funded. Not ours; left untouched.",
+  "frontendLivePanel2026-11-19": "Hosted demo (GitHub Pages) now reads escrowCount + getEscrow(0) + getEscrow(2) live from https://evm-testnet.qore.host via eth_call and links all cycle txs to the explorer. The interactive walkthrough remains a labelled local simulation. Bundle index-BmzBbmSt.js verified served at ajengayukusu.github.io/deedlock-escrow/."
 }

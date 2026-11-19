@@ -1,20 +1,188 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 /**
- * DeedLock Escrow — frontend (DEMO MODE).
+ * DeedLock Escrow — frontend.
  *
- * This build runs fully locally with an in-memory simulation of the
- * DeedLockEscrow state machine, so judges can click through the whole flow
- * without a wallet or testnet funds. Every "PQ approval" button here stands
- * for the real on-chain step: signing the domain-bound action message with
- * an ML-DSA-87 key and having the contract verify it through the QoreChain
- * pqcVerify precompile (0x0A01) against the key registered on chain
- * (pqcKeyStatus, 0x0A02). Demo signatures are visual placeholders only.
+ * The "Live on Diana" panel at the top reads REAL escrow state directly
+ * from the deployed DeedLockEscrow contract via JSON-RPC `eth_call`
+ * (escrowCount + getEscrow) — that part is not a simulation. The
+ * interactive walkthrough below it runs locally with an in-memory
+ * simulation of the DeedLockEscrow state machine, so judges can click
+ * through the whole flow without a wallet or testnet funds. Every "PQ
+ * approval" button there stands for the real on-chain step: signing the
+ * domain-bound action message with an ML-DSA-87 key and having the
+ * contract verify it through the QoreChain pqcVerify precompile (0x0A01)
+ * against the key registered on chain (pqcKeyStatus, 0x0A02). Simulated
+ * signatures are visual placeholders only; write actions happen on chain
+ * through the contract (see the live panel's explorer links), not from
+ * this page.
  *
  * The validation rules below intentionally mirror the contract: 1–5
  * tranches, tranche sum == total, distinct parties, refund only after the
  * timelock, guardian can freeze but never release.
  */
+
+/* ---------------- Live on-chain reads (Diana testnet) ---------------- */
+
+const RPC_URL = "https://evm-testnet.qore.host";
+const CONTRACT = "0xb6d7B326F44729772dbAD5B094B61E40C1a71b07";
+const EXPLORER = "https://explore.qore.network";
+const STATUS_NAMES = ["Created", "Funded", "Released", "Refunded", "Disputed", "Resolved"];
+const SEL_ESCROW_COUNT = "0x675ac67a"; // escrowCount()
+const SEL_GET_ESCROW = "0x7d19e596"; // getEscrow(uint256)
+
+interface LiveEscrow {
+  id: number;
+  buyer: string;
+  seller: string;
+  total: bigint;
+  remaining: bigint;
+  released: bigint;
+  currentTranche: bigint;
+  approvalNonce: bigint;
+  status: number;
+  frozen: boolean;
+}
+
+async function rpcCall(method: string, params: unknown[]): Promise<string> {
+  const res = await fetch(RPC_URL, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }),
+  });
+  const j = await res.json();
+  if (j.error) throw new Error(j.error.message ?? "RPC error");
+  return j.result as string;
+}
+
+function wordAt(hex: string, i: number): string {
+  return hex.slice(2 + i * 64, 2 + (i + 1) * 64);
+}
+function addrAt(hex: string, i: number): string {
+  return "0x" + wordAt(hex, i).slice(24);
+}
+function uintAt(hex: string, i: number): bigint {
+  return BigInt("0x" + wordAt(hex, i));
+}
+
+async function fetchLiveEscrow(id: number): Promise<LiveEscrow> {
+  const data = SEL_GET_ESCROW + id.toString(16).padStart(64, "0");
+  const out = await rpcCall("eth_call", [{ to: CONTRACT, data }, "latest"]);
+  return {
+    id,
+    buyer: addrAt(out, 0),
+    seller: addrAt(out, 1),
+    total: uintAt(out, 5),
+    remaining: uintAt(out, 6),
+    released: uintAt(out, 7),
+    currentTranche: uintAt(out, 8),
+    approvalNonce: uintAt(out, 10),
+    status: Number(uintAt(out, 11)),
+    frozen: uintAt(out, 12) !== 0n,
+  };
+}
+
+function fmtQor(wei: bigint): string {
+  const whole = wei / 10n ** 18n;
+  const frac = (wei % 10n ** 18n).toString().padStart(18, "0").replace(/0+$/, "");
+  return frac ? `${whole}.${frac}` : `${whole}`;
+}
+
+const CYCLE_TXS: { id: number; label: string; hash: string }[] = [
+  { id: 0, label: "create", hash: "0x128900a8ed99aa50ec476bbec416193e30bb4df3755f6699b77a68844fc513e9" },
+  { id: 0, label: "fund 0.2 QOR", hash: "0x60b12f2b2c77bc047d079f45fae30bd034065b4c9772a2bfe699cdced29f236c" },
+  { id: 0, label: "buyer PQ approve T1", hash: "0x945441f20f61370dade0b6090eeb5c1354ff7b2da380357413c4cf5f216f7ddd" },
+  { id: 0, label: "seller PQ approve T1 → release", hash: "0x1525330808b5c1e07fa773e57d5b1bf621b4abed9db23f3157c780c3d945f888" },
+  { id: 0, label: "buyer PQ approve T2", hash: "0xcb0e018abfa9be3d51ed525870be4a0b84f3fe7408d1c7ea0ca1585100fc9f8a" },
+  { id: 0, label: "seller PQ approve T2 → release", hash: "0xfd01aa4f44b5feacff07e34812b0ec3d6d735d2a7e1e8b2e56ff1322e59eb3ad" },
+  { id: 2, label: "create", hash: "0xfc7a5ee3130c77220bf9cd7e29472cc319f5d4b9893a7f051ad1c65188e9d5a1" },
+  { id: 2, label: "fund 0.2 QOR", hash: "0x2a59aeb636b5f286b8ee9eabb8e8b5643189e64ff90769dba0d84e51b615c628" },
+  { id: 2, label: "buyer PQ approve T1", hash: "0x69776b6f830ead191025ec3645e7e77f47f60d52e9c9a672d82b4e367de7d011" },
+  { id: 2, label: "seller PQ approve T1 → release", hash: "0xf069c90388f65b32959555a9b94162fbc43cc4af2fba0180f4ea55b321ff2648" },
+  { id: 2, label: "buyer PQ approve T2", hash: "0xa011448f2c1dbee02fab1aaa1e8331d6c2caced382bbedc3e8550357776c5134" },
+  { id: 2, label: "seller PQ approve T2 → release", hash: "0x0633c9fdc61ad3ca731974e23d963374b992f873127b6e0fc29fe4056ed84bf4" },
+];
+
+function LivePanel() {
+  const [state, setState] = useState<
+    | { kind: "loading" }
+    | { kind: "error"; message: string }
+    | { kind: "ok"; count: number; block: number; escrows: LiveEscrow[] }
+  >({ kind: "loading" });
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const countOut = await rpcCall("eth_call", [{ to: CONTRACT, data: SEL_ESCROW_COUNT }, "latest"]);
+        const count = Number(BigInt(countOut));
+        const block = Number(BigInt(await rpcCall("eth_blockNumber", [])));
+        const ours: LiveEscrow[] = [];
+        for (const id of [0, 2]) {
+          if (id < count) ours.push(await fetchLiveEscrow(id));
+        }
+        if (!cancelled) setState({ kind: "ok", count, block, escrows: ours });
+      } catch (e) {
+        if (!cancelled)
+          setState({ kind: "error", message: e instanceof Error ? e.message : String(e) });
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return (
+    <div className="card" style={{ marginBottom: 20 }}>
+      <h2>Live on Diana — real escrow state, read from the contract</h2>
+      <p className="hint">
+        Contract{" "}
+        <a href={`${EXPLORER}/address/${CONTRACT}`} target="_blank" rel="noreferrer">
+          {CONTRACT}
+        </a>{" "}
+        · read live via <code>eth_call</code> (<code>escrowCount</code> + <code>getEscrow</code>).
+        The interactive walkthrough further down is a local simulation; this panel is not.
+      </p>
+      {state.kind === "loading" && <p className="hint">Reading the chain…</p>}
+      {state.kind === "error" && (
+        <p className="hint">Live read failed ({state.message}). The contract state is unchanged;
+        reload to retry.</p>
+      )}
+      {state.kind === "ok" && (
+        <>
+          <p className="hint">
+            escrowCount on chain: <b>{state.count}</b> · read at EVM block {state.block}. Our two
+            fully-released demo escrows:
+          </p>
+          {state.escrows.map((e) => (
+            <div key={e.id} style={{ marginBottom: 12 }}>
+              <div className="t">
+                Escrow #{e.id} — {fmtQor(e.total)} QOR{" "}
+                <span className={`pill ${STATUS_NAMES[e.status]}`}>{STATUS_NAMES[e.status]}</span>
+                {e.frozen && <span className="pill Disputed">Frozen</span>}
+              </div>
+              <div className="m">
+                released {fmtQor(e.released)} QOR · remaining {fmtQor(e.remaining)} QOR · tranches
+                completed: {e.currentTranche.toString()} · approval nonce {e.approvalNonce.toString()}
+                <br />
+                buyer {e.buyer} · seller {e.seller}
+              </div>
+              <div className="m">
+                {CYCLE_TXS.filter((t) => t.id === e.id).map((t) => (
+                  <span key={t.hash} style={{ marginRight: 10 }}>
+                    <a href={`${EXPLORER}/tx/${t.hash}`} target="_blank" rel="noreferrer">
+                      {t.label}
+                    </a>
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </>
+      )}
+    </div>
+  );
+}
 
 type Status = "Created" | "Funded" | "Released" | "Refunded" | "Disputed" | "Resolved";
 
@@ -219,7 +387,7 @@ export default function App() {
         <div className="badges">
           <span className="badge">QoreChain Diana Testnet · EVM 9800</span>
           <span className="badge">ML-DSA-87 · pqcVerify 0x0A01</span>
-          <span className="badge demo">DEMO MODE — local simulation, no chain connection</span>
+          <span className="badge demo">LIVE READS from Diana · walkthrough below is a local simulation</span>
         </div>
       </header>
       <p className="sub">
@@ -227,9 +395,12 @@ export default function App() {
         Funds stay locked in the contract and are released only when <b>the buyer AND the seller both
         sign with an ML-DSA-87 key</b> registered on-chain — an ECDSA key
         alone is never enough. On testnet that signature is genuinely verified
-        by the <i>pqcVerify</i> precompile; in this demo the approval buttons
-        simulate it.
+        by the <i>pqcVerify</i> precompile; two full escrow cycles have already
+        run on chain that way (live panel below). In the interactive walkthrough
+        further down, the approval buttons simulate it.
       </p>
+
+      <LivePanel />
 
       <div className="grid">
         {/* ---------------- Create form + list ---------------- */}
@@ -424,7 +595,9 @@ export default function App() {
       <p className="hint" style={{ marginTop: 24 }}>
         DeedLock Escrow · QoreChain Build Before Q-Day — Post-Quantum dApp ·
         Contract: <i>DeedLockEscrow.sol</i> (Solidity 0.8.24) · Diana precompiles:
-        pqcVerify 0x0A01, pqcKeyStatus 0x0A02 · This demo is not connected to the chain.
+        pqcVerify 0x0A01, pqcKeyStatus 0x0A02 · The panel at the top reads live
+        escrow state from the chain; the interactive walkthrough is a local
+        simulation and sends no transactions.
       </p>
     </div>
   );

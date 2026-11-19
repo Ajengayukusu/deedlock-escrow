@@ -143,6 +143,25 @@ funded amount), `remainingAmount = 0`, `currentTranche = 2`,
 `approvalNonce = 2` (all four approvals consumed — both parties, both
 tranches), status `Released`: every tranche released in full to the seller.
 
+**Second full cycle — escrow #2 (19 Nov 2026).** The whole flow was run a
+second time end-to-end on the live contract (the seller first opened a fresh
+EVM window via a hybrid-signed native tx,
+`3CDFB0F24EDA10A6DA7852855D19DA154DDC86DC70A108358CE7D7DA83177F54`): create
+`0xfc7a5ee3…d5a1` → fund 0.2 QOR
+`0x2a59aeb6…628` → buyer PQ approve T1 `0x69776b6f…011` → seller PQ approve
+T1 → release `0xf069c903…648` → buyer PQ approve T2 `0xa011448f…134` →
+seller PQ approve T2 → release `0x0633c9fd…bf4`. Final state of escrow #2,
+re-read independently via `eth_call`: `releasedAmount = 0.2 QOR`,
+`remainingAmount = 0`, `currentTranche = 2`, `approvalNonce = 2`, status
+`Released`. (`escrowCount` is now 3: escrow #1 was created by an unrelated
+external account and was never funded — not ours, left untouched.)
+
+**The hosted demo now reads the chain.** The demo's top panel fetches
+`escrowCount` + `getEscrow(0)` + `getEscrow(2)` live from Diana via
+`eth_call` and links every cycle transaction to the explorer; the
+interactive walkthrough below it remains a clearly-labelled local
+simulation that sends no transactions.
+
 ## Run it
 
 ```bash
@@ -232,7 +251,8 @@ contracts/   DeedLockEscrow.sol · IQorePqc.sol · MockPqc.sol (tests) · MockER
 test/        DeedLockEscrow.test.ts — 44 tests (positive + attack)
 scripts/     deploy.ts — Diana (9800) deployment, refuses other chains
 deployments.testnet.json — live deployment record: address, parties, every native + EVM tx hash, verification results
-frontend/    Vite + React + TS demo (local simulation of the contract flow)
+frontend/    Vite + React + TS demo — top panel reads live escrow state from Diana via eth_call;
+             the interactive walkthrough is a local simulation of the contract flow
 audit/       QCAI_AUDIT_PLAN.md (plan, run log, findings triage) + exported QCAI report PDF + the audited source bundle
 AI_USAGE.md  How AI was used to build this project, and what humans decided
 ```
