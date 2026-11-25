@@ -4,7 +4,7 @@
 
 **Live demo:** https://ajengayukusu.github.io/deedlock-escrow/
 
-**Demo video (≤ 3 min):** https://www.youtube.com/watch?v=HdANzE-E2fY
+**Demo video (≤ 3 min):** https://www.youtube.com/watch?v=VcxvVxkuW8Q
 
 > **DP jual-beli properti & kendaraan bekas, dikunci oleh dua tanda tangan ML-DSA-87.**
 > Built for the **QoreChain Developer Fest "Build Before Q-Day"** — **Post-Quantum dApp** category.
