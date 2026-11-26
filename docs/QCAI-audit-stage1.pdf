@@ -1,0 +1,674 @@
+%PDF-1.3
+%ºß¬à
+3 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 4 0 R
+>>
+endobj
+4 0 obj
+<<
+/Length 8171
+>>
+stream
+0.5670000000000001 w
+0 G
+BT
+/F1 22 Tf
+25.2999999999999972 TL
+0.063 0.725 0.506 rg
+39.6850393700787407 785.1970866141732586 Td
+(QoreChain AI) Tj
+ET
+BT
+/F1 16 Tf
+18.3999999999999986 TL
+0.157 g
+39.6850393700787407 756.8506299212598378 Td
+(Security Audit Report) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.392 g
+39.6850393700787407 728.5041732283464171 Td
+(Generated: 11/26/2026, 8:05:41 AM) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.392 g
+39.6850393700787407 714.3309448818897636 Td
+(Contract Name: DeedLockEscrow) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.392 g
+39.6850393700787407 700.15771653543311 Td
+(Blockchain: qorechain) Tj
+ET
+0.78 G
+39.6850393700787407 685.9844881889763428 m
+555.5905511811024553 685.9844881889763428 l
+S
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0. g
+39.6850393700787407 657.6380314960629221 Td
+(Audit Overview) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+39.6850393700787407 629.291574803149615 Td
+(Overall Security Score: 72/100) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+39.6850393700787407 615.1183464566928478 Td
+(Risk Level: MEDIUM) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+39.6850393700787407 600.9451181102361943 Td
+(Quantum Readiness: QUANTUM-SAFE) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+39.6850393700787407 586.7718897637794271 Td
+(Total Vulnerabilities: 5) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0. g
+39.6850393700787407 544.2522047244094665 Td
+(Executive Summary) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.235 g
+39.6850393700787407 515.9057480314959321 Td
+(The DeedLockEscrow contract implements a quantum-safe escrow system using ML-DSA-87 signatures for secure) Tj
+T* (fund management. The contract demonstrates strong quantum resistance through its reliance on post-quantum) Tj
+T* (cryptography. However, there are medium-severity concerns regarding PQC key verification, potential reentrancy) Tj
+T* (risks, and input validation that should be addressed. The overall architecture is sound with proper separation of) Tj
+T* (concerns and clear business logic.) Tj
+ET
+0.78 G
+0.5670000000000001 w
+0.78 G
+0.5670000000000001 w
+0.06 0.73 0.51 rg
+0.78 G
+0. w
+0.06 0.73 0.51 rg
+40. 416.69314960629913 89.5349594025567086 -21.4999999999999964 re
+f
+BT
+/F2 10 Tf
+11.5 TL
+1. g
+45. 403.1931496062991869 Td
+(Vulnerability) Tj
+ET
+0.06 0.73 0.51 rg
+0.78 G
+0. w
+0.06 0.73 0.51 rg
+129.5349594025567228 416.69314960629913 48.6000000000000014 -21.4999999999999964 re
+f
+BT
+/F2 10 Tf
+11.5 TL
+1. g
+134.5349594025566944 403.1931496062991869 Td
+(Severity) Tj
+ET
+0.06 0.73 0.51 rg
+0.78 G
+0. w
+0.06 0.73 0.51 rg
+178.1349594025567171 416.69314960629913 110.890000000000029 -21.4999999999999964 re
+f
+BT
+/F2 10 Tf
+11.5 TL
+1. g
+183.1349594025566887 403.1931496062991869 Td
+(Location) Tj
+ET
+0.06 0.73 0.51 rg
+0.78 G
+0. w
+0.06 0.73 0.51 rg
+289.0249594025567603 416.69314960629913 266.2550405975375725 -21.4999999999999964 re
+f
+BT
+/F2 10 Tf
+11.5 TL
+1. g
+294.0249594025567603 403.1931496062991869 Td
+(Recommendation) Tj
+ET
+0.78 G
+0.5670000000000001 w
+0.96 g
+0.78 G
+0. w
+0.96 g
+40. 395.1931496062991869 89.5349594025567086 -41.0499999999999972 re
+f
+BT
+/F1 9 Tf
+10.3499999999999996 TL
+0.314 g
+45. 382.5431496062992096 Td
+(Insecure PQC Key) Tj
+T* (Verification) Tj
+ET
+0.96 g
+0.78 G
+0. w
+0.96 g
+129.5349594025567228 395.1931496062991869 48.6000000000000014 -41.0499999999999972 re
+f
+BT
+/F1 9 Tf
+10.3499999999999996 TL
+0.314 g
+134.5349594025566944 382.5431496062992096 Td
+(HIGH) Tj
+ET
+0.96 g
+0.78 G
+0. w
+0.96 g
+178.1349594025567171 395.1931496062991869 110.890000000000029 -41.0499999999999972 re
+f
+BT
+/F1 9 Tf
+10.3499999999999996 TL
+0.314 g
+183.1349594025566887 382.5431496062992096 Td
+(DeedLockEscrow.sol:297) Tj
+ET
+0.96 g
+0.78 G
+0. w
+0.96 g
+289.0249594025567603 395.1931496062991869 266.2550405975375725 -41.0499999999999972 re
+f
+BT
+/F1 9 Tf
+10.3499999999999996 TL
+0.314 g
+294.0249594025567603 382.5431496062992096 Td
+(Replace keccak256 comparison with explicit byte-by-byte) Tj
+T* (equality check or use a proper cryptographic library to validate) Tj
+T* (public key integrity.) Tj
+ET
+1. g
+0.78 G
+0. w
+1. g
+40. 354.1431496062991187 89.5349594025567086 -41.0499999999999972 re
+f
+BT
+/F1 9 Tf
+10.3499999999999996 TL
+0.314 g
+45. 341.4931496062991982 Td
+(Potential) Tj
+T* (Reentrancy in Pay) Tj
+T* (Function) Tj
+ET
+1. g
+0.78 G
+0. w
+1. g
+129.5349594025567228 354.1431496062991187 48.6000000000000014 -41.0499999999999972 re
+f
+BT
+/F1 9 Tf
+10.3499999999999996 TL
+0.314 g
+134.5349594025566944 341.4931496062991982 Td
+(MEDIUM) Tj
+ET
+1. g
+0.78 G
+0. w
+1. g
+178.1349594025567171 354.1431496062991187 110.890000000000029 -41.0499999999999972 re
+f
+BT
+/F1 9 Tf
+10.3499999999999996 TL
+0.314 g
+183.1349594025566887 341.4931496062991982 Td
+(DeedLockEscrow.sol:378) Tj
+ET
+1. g
+0.78 G
+0. w
+1. g
+289.0249594025567603 354.1431496062991187 266.2550405975375725 -41.0499999999999972 re
+f
+BT
+/F1 9 Tf
+10.3499999999999996 TL
+0.314 g
+294.0249594025567603 341.4931496062991982 Td
+(Ensure that all external calls are made after state updates, or) Tj
+T* (implement additional reentrancy protection specifically for the) Tj
+T* (_pay function.) Tj
+ET
+0.96 g
+0.78 G
+0. w
+0.96 g
+40. 313.0931496062991073 89.5349594025567086 -41.0499999999999972 re
+f
+BT
+/F1 9 Tf
+10.3499999999999996 TL
+0.314 g
+45. 300.44314960629913 Td
+(Missing Input) Tj
+T* (Validation for) Tj
+T* (Tranche Amounts) Tj
+ET
+0.96 g
+0.78 G
+0. w
+0.96 g
+129.5349594025567228 313.0931496062991073 48.6000000000000014 -41.0499999999999972 re
+f
+BT
+/F1 9 Tf
+10.3499999999999996 TL
+0.314 g
+134.5349594025566944 300.44314960629913 Td
+(MEDIUM) Tj
+ET
+0.96 g
+0.78 G
+0. w
+0.96 g
+178.1349594025567171 313.0931496062991073 110.890000000000029 -41.0499999999999972 re
+f
+BT
+/F1 9 Tf
+10.3499999999999996 TL
+0.314 g
+183.1349594025566887 300.44314960629913 Td
+(DeedLockEscrow.sol:194) Tj
+ET
+0.96 g
+0.78 G
+0. w
+0.96 g
+289.0249594025567603 313.0931496062991073 266.2550405975375725 -41.0499999999999972 re
+f
+BT
+/F1 9 Tf
+10.3499999999999996 TL
+0.314 g
+294.0249594025567603 300.44314960629913 Td
+(Add explicit validation to ensure individual tranche amounts are) Tj
+T* (within acceptable ranges and that their cumulative sum doesn't) Tj
+T* (overflow.) Tj
+ET
+1. g
+0.78 G
+0. w
+1. g
+40. 272.0431496062990959 89.5349594025567086 -30.6999999999999993 re
+f
+BT
+/F1 9 Tf
+10.3499999999999996 TL
+0.314 g
+45. 259.3931496062991755 Td
+(Redundant Checks) Tj
+T* (in PQC Verification) Tj
+ET
+1. g
+0.78 G
+0. w
+1. g
+129.5349594025567228 272.0431496062990959 48.6000000000000014 -30.6999999999999993 re
+f
+BT
+/F1 9 Tf
+10.3499999999999996 TL
+0.314 g
+134.5349594025566944 259.3931496062991755 Td
+(LOW) Tj
+ET
+1. g
+0.78 G
+0. w
+1. g
+178.1349594025567171 272.0431496062990959 110.890000000000029 -30.6999999999999993 re
+f
+BT
+/F1 9 Tf
+10.3499999999999996 TL
+0.314 g
+183.1349594025566887 259.3931496062991755 Td
+(DeedLockEscrow.sol:272) Tj
+ET
+1. g
+0.78 G
+0. w
+1. g
+289.0249594025567603 272.0431496062990959 266.2550405975375725 -30.6999999999999993 re
+f
+BT
+/F1 9 Tf
+10.3499999999999996 TL
+0.314 g
+294.0249594025567603 259.3931496062991755 Td
+(Consider refactoring the verification logic to improve readability) Tj
+T* (while maintaining all necessary checks.) Tj
+ET
+0.96 g
+0.78 G
+0. w
+0.96 g
+40. 241.3431496062990789 89.5349594025567086 -41.0499999999999972 re
+f
+BT
+/F1 9 Tf
+10.3499999999999996 TL
+0.314 g
+45. 228.69314960629913 Td
+(PQC Precompile) Tj
+T* (Dependency) Tj
+T* (Management) Tj
+ET
+0.96 g
+0.78 G
+0. w
+0.96 g
+129.5349594025567228 241.3431496062990789 48.6000000000000014 -41.0499999999999972 re
+f
+BT
+/F1 9 Tf
+10.3499999999999996 TL
+0.314 g
+134.5349594025566944 228.69314960629913 Td
+(INFO) Tj
+ET
+0.96 g
+0.78 G
+0. w
+0.96 g
+178.1349594025567171 241.3431496062990789 110.890000000000029 -41.0499999999999972 re
+f
+BT
+/F1 9 Tf
+10.3499999999999996 TL
+0.314 g
+183.1349594025566887 228.69314960629913 Td
+(DeedLockEscrow.sol:317) Tj
+ET
+0.96 g
+0.78 G
+0. w
+0.96 g
+289.0249594025567603 241.3431496062990789 266.2550405975375725 -41.0499999999999972 re
+f
+BT
+/F1 9 Tf
+10.3499999999999996 TL
+0.314 g
+294.0249594025567603 228.69314960629913 Td
+(Add validation in the constructor to verify that the injected) Tj
+T* (precompile addresses are valid and functional.) Tj
+ET
+0.78 G
+0.5670000000000001 w
+0.78 G
+0. w
+0.78 G
+0.5670000000000001 w
+0.78 G
+0.5670000000000001 w
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0.588 g
+227.5977952755905562 19.8427559055116944 Td
+(Page 1 of 1 - Powered by QoreChain AI) Tj
+ET
+endstream
+endobj
+1 0 obj
+<</Type /Pages
+/Kids [3 0 R ]
+/Count 1
+>>
+endobj
+5 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+6 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+7 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+8 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+9 0 obj
+<<
+/Type /Font
+/BaseFont /Courier
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+10 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+11 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+12 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+13 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Roman
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+14 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+15 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Italic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+16 0 obj
+<<
+/Type /Font
+/BaseFont /Times-BoldItalic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+17 0 obj
+<<
+/Type /Font
+/BaseFont /ZapfDingbats
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+18 0 obj
+<<
+/Type /Font
+/BaseFont /Symbol
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+2 0 obj
+<<
+/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
+/Font <<
+/F1 5 0 R
+/F2 6 0 R
+/F3 7 0 R
+/F4 8 0 R
+/F5 9 0 R
+/F6 10 0 R
+/F7 11 0 R
+/F8 12 0 R
+/F9 13 0 R
+/F10 14 0 R
+/F11 15 0 R
+/F12 16 0 R
+/F13 17 0 R
+/F14 18 0 R
+>>
+/XObject <<
+>>
+>>
+endobj
+19 0 obj
+<<
+/Producer (jsPDF 4.0.0)
+/CreationDate (D:20261126080541+07'00')
+>>
+endobj
+20 0 obj
+<<
+/Type /Catalog
+/Pages 1 0 R
+/OpenAction [3 0 R /FitH null]
+/PageLayout /OneColumn
+>>
+endobj
+xref
+0 21
+0000000000 65535 f 
+0000008375 00000 n 
+0000010192 00000 n 
+0000000015 00000 n 
+0000000152 00000 n 
+0000008432 00000 n 
+0000008557 00000 n 
+0000008687 00000 n 
+0000008820 00000 n 
+0000008957 00000 n 
+0000009080 00000 n 
+0000009209 00000 n 
+0000009341 00000 n 
+0000009477 00000 n 
+0000009605 00000 n 
+0000009732 00000 n 
+0000009861 00000 n 
+0000009994 00000 n 
+0000010096 00000 n 
+0000010440 00000 n 
+0000010526 00000 n 
+trailer
+<<
+/Size 21
+/Root 20 0 R
+/Info 19 0 R
+/ID [ <7F3D4FEF09E1D4256B1BA086E30CAE5C> <7F3D4FEF09E1D4256B1BA086E30CAE5C> ]
+>>
+startxref
+10630
+%%EOF
